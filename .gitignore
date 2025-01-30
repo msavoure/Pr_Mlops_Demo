@@ -1,0 +1,54 @@
+# ------------------------------------------------------------------------------
+# OS & Editor-specific
+# ------------------------------------------------------------------------------
+# Fichiers de Windows à ignorer
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+
+# Dossiers d'IDE / éditeur
+.vscode/
+.idea/
+*.code-workspace
+
+# ------------------------------------------------------------------------------
+# Python & Pipenv
+# ------------------------------------------------------------------------------
+# Compiled python files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environnements virtuels (pipenv)
+.venv/
+venv/
+# Si vous avez configuré Pipenv pour utiliser .venv comme dossier local, on l’ignore
+
+# pipenv lockfile - vous pouvez choisir de le committer ou non.
+# Si vous préférez le versionner pour figer les versions, laissez-le de côté.
+# Pipfile.lock
+
+# ------------------------------------------------------------------------------
+# Logs & temp
+# ------------------------------------------------------------------------------
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# ------------------------------------------------------------------------------
+# MLflow & Data
+# ------------------------------------------------------------------------------
+# Si vous ne voulez pas versionner les dossiers MLflow locaux
+mlruns/
+# Autres data lourdes si besoin
+data/
+
+
+# MLflow artifacts
+mlruns/
+git
