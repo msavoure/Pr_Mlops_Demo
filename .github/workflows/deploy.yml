@@ -29,7 +29,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: acrmlopsdemoiris.azurecr.io/myapi:${{ github.sha }}
+          tags: |
+            acrmlopsdemoiris.azurecr.io/myapi:${{ github.sha }}
+            acrmlopsdemoiris.azurecr.io/myapi:latest
           file: Dockerfile
 
   deploy:
@@ -46,4 +48,4 @@ jobs:
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           slot-name: "production"
-          images: acrmlopsdemoiris.azurecr.io/myapi:${{ github.sha }}
+          images: acrmlopsdemoiris.azurecr.io/myapi:latest
