@@ -1,22 +1,17 @@
+# Utiliser une image Python légère
 FROM python:3.10.10-slim
 
-# 1) Définir le répertoire de travail
 WORKDIR /app
 
-# 2) Copier Pipfile & Pipfile.lock
-COPY Pipfile Pipfile.lock ./
+# Copier les fichiers nécessaires
+COPY Pipfile Pipfile.lock /app/
+RUN pip install --no-cache-dir pipenv && pipenv install --system --deploy
 
-# 3) Installer Pipenv et les dépendances système
-RUN pip install --no-cache-dir pipenv && \
-    pipenv install --system --deploy
+COPY src/ /app/src/
+COPY random_forest.pkl /app/
 
-# 4) Copier le code source dans /app/src
-COPY src/ ./src
-COPY random_forest.pkl .
-
-
-# 5) Exposer le port 5000 (optionnel mais pratique)
+# Exposer le port utilisé par FastAPI
 EXPOSE 5000
 
-# 6) Commande de lancement
-CMD ["python", "src/api.py"]
+# Démarrer l’API avec Uvicorn
+CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "5000"]

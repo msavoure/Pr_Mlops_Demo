@@ -8,6 +8,9 @@ pandas = "*"
 scikit-learn = "*"
 mlflow = "*"
 pytest = "*"
+fastapi = "*"
+uvicorn = "*"
+exceptiongroup = "*"
 
 [dev-packages]
 

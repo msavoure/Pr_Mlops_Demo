@@ -1,32 +1,51 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
 import joblib
+import mlflow.sklearn
+from typing import List
 
-app = Flask(__name__)
+# Initialisation de l'API
+app = FastAPI(
+    title="MLOps Demo API",
+    description="API de prédiction avec FastAPI & Swagger UI 🚀",
+    version="1.0"
+)
 
-# Charger le fichier local random_forest.pkl
+# Chargement du modèle ML
 try:
     model = joblib.load("random_forest.pkl")
-    print("Model loaded successfully from random_forest.pkl")
+    print("✅ Model loaded successfully.")
 except Exception as e:
-    print(f"Could not load model: {e}")
     model = None
+    print(f"❌ Could not load model: {e}")
 
-@app.route("/", methods=["GET"])
-def index():
-    return {"message": "Hello, MLOps Demo !"}
+# Définition d'un modèle de requête avec des valeurs par défaut
+class InputData(BaseModel):
+    features: List[float] = Field(
+        default=[5.1, 3.5, 1.4, 0.2], 
+        example=[5.1, 3.5, 1.4, 0.2],
+        description="Liste de valeurs numériques pour la prédiction"
+    )
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    try:
-        if model is None:
-            return jsonify({"error": "Model not loaded"}), 500
+# Route d'accueil
+@app.get("/")
+def home():
+    return {"message": "Bienvenue sur l'API de prédiction MLOps 🚀", "docs": "/docs"}
 
-        data = request.get_json()  # Ex. {"features": [5.1, 3.5, 1.4, 0.2]}
-        features = data["features"]
-        prediction = model.predict([features])
-        return jsonify({"prediction": float(prediction[0])})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+# Route de prédiction
+@app.post("/predict")
+def predict(data: InputData):
+    if model is None:
+        return {"error": "Model not loaded"}
 
+    prediction = model.predict([data.features])[0]
+    return {
+        "features": data.features,
+        "prediction": int(prediction),
+        "model": "RandomForestClassifier",
+    }
+
+# Exécution en local
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)
